@@ -12,6 +12,8 @@ from datetime import datetime
 from ai.chatbot import search_notices
 from ai.nlp import preprocess_text, detect_category, detect_intent
 import openpyxl
+import streamlit as st
+st.title("e_ NoticeBoard System")
 
 app = Flask(__name__)
 app.secret_key = Config.SECRET_KEY
