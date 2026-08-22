@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Signup | e-NoticeBoard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #0984e3, #00b894);
+      background-attachment: fixed;
+      font-family: 'Poppins', sans-serif;
+      padding: 60px 15px;
+    }
+
+    .signup-box {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      padding: 40px 35px;
+      max-width: 420px;
+      margin: 0 auto;
+      animation: fadeUp 0.8s ease;
+    }
+
+    .signup-box h3 {
+      text-align: center;
+      font-weight: 700;
+      color: #0984e3;
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-control, .form-select {
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: rgba(255,255,255,0.8);
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #00b894;
+      box-shadow: 0 0 0 0.25rem rgba(0,184,148,0.25);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #0984e3, #00b894);
+      border: none;
+      border-radius: 12px;
+      padding: 10px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #00b894, #0984e3);
+      transform: translateY(-2px);
+    }
+
+    a {
+      color: #0984e3;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      color: #00b894;
+      text-decoration: underline;
+    }
+
+    .alert {
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="signup-box">
+    <h3><i class="bi bi-person-plus-fill"></i> Student Signup</h3>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="alert alert-{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+      <!-- Full Name -->
+      <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+
+      <!-- Roll Number (ADDED) -->
+      <div class="mb-3">
+        <label class="form-label">Roll Number</label>
+        <input type="text" name="rollno" class="form-control" required>
+      </div>
+
+      <!-- Department -->
+      <div class="mb-3">
+        <label class="form-label">Department</label>
+        <select name="department" class="form-select" required>
+          <option value="">Select Department</option>
+          <option value="Computer">Computer</option>
+          <option value="IT">IT</option>
+          <option value="ENTC">ENTC</option>
+        </select>
+      </div>
+
+      <!-- Year -->
+      <div class="mb-3">
+        <label class="form-label">Year</label>
+        <select name="year" class="form-select" required>
+          <option value="">Select Year</option>
+          <option value="FY">FY</option>
+          <option value="SY">SY</option>
+          <option value="TY">TY</option>
+          <option value="BTech">BTech</option>
+        </select>
+      </div>
+
+      <!-- Division -->
+      <div class="mb-3">
+        <label class="form-label">Division</label>
+        <select name="division" class="form-select" required>
+          <option value="">Select Division</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+        </select>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" required>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+
+      <!-- Phone -->
+      <div class="mb-3">
+        <label class="form-label">Mobile No</label>
+        <input type="text" name="phone" class="form-control" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        <i class="bi bi-person-check-fill"></i> Sign Up
+      </button>
+
+      <p class="mt-3 text-center">
+        Already registered? <a href="{{ url_for('login') }}">Login here</a>
+      </p>
+
+    </form>
+  </div>
+
+</body>
+</html>
