@@ -3,3 +3,5 @@ Werkzeug
 streamlit
 sentence-transformers
 nltk
+openpyxl
+pandas
