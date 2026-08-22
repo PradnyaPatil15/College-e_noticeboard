@@ -1,11 +1,11 @@
-import re
 import nltk
 
+nltk.download("stopwords")
+nltk.download("punkt")
+nltk.download("punkt_tab")
+
 from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
 
-
-# Stopwords
 stop_words = set(stopwords.words("english"))
 
 # Lemmatizer
