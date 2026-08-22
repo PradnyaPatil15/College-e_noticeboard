@@ -125,12 +125,14 @@ def detect_category(words):
 
 def detect_intent(words):
 
-    # Date Query
+    # Date / Deadline Query
     if any(word in words for word in [
         "when",
         "date",
         "deadline",
-        "last"
+        "last",
+        "schedule",
+        "timing"
     ]):
         return "DATE_QUERY"
 
@@ -139,15 +141,23 @@ def detect_intent(words):
         "who",
         "eligible",
         "eligibility",
-        "apply"
+        "apply",
+        "requirement",
+        "requirements"
     ]):
         return "ELIGIBILITY_QUERY"
 
-    # Summary Query
+    # Summary / Information Query
     if any(word in words for word in [
         "summary",
         "summarize",
-        "about"
+        "about",
+        "tell",
+        "information",
+        "details",
+        "detail",
+        "explain",
+        "what"
     ]):
         return "SUMMARY_QUERY"
 
@@ -155,7 +165,8 @@ def detect_intent(words):
     if any(word in words for word in [
         "latest",
         "recent",
-        "new"
+        "new",
+        "newest"
     ]):
         return "LATEST_NOTICES"
 
