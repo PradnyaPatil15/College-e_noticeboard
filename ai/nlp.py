@@ -1,10 +1,15 @@
+import re
 import nltk
 
+# Download required NLTK resources
 nltk.download("stopwords")
 nltk.download("punkt")
 nltk.download("punkt_tab")
+nltk.download("wordnet")
+nltk.download("omw-1.4")
 
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 
 stop_words = set(stopwords.words("english"))
 
@@ -71,6 +76,7 @@ CATEGORY_KEYWORDS = {
         "grant"
     ]
 }
+
 
 # -----------------------------------------
 # NLP PREPROCESSING
