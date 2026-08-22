@@ -9,6 +9,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 from config import Config
 from datetime import datetime
+from ai.chatbot import search_notices
 import openpyxl
 
 app = Flask(__name__)
@@ -504,7 +505,43 @@ def admin_dashboard():
 
     return render_template('admin_dashboard.html', students=students, notices=notices)
 
+#----------------ai---------------
 
+@app.route('/ai_chat', methods=['GET', 'POST'])
+def ai_chat():
+
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+
+    answer = None
+    results = []
+
+    if request.method == 'POST':
+
+        question = request.form['question']
+
+        results = search_notices(question)
+
+        if results:
+
+            best_score, best_notice = results[0]
+
+            answer = (
+                f"Based on the available notices, "
+                f"the most relevant notice is: "
+                f"{best_notice['title']}"
+            )
+
+        else:
+            answer = "Sorry, I could not find any relevant notice."
+
+    return render_template(
+        'ai_chat.html',
+        answer=answer,
+        results=results
+    )
+    
+    
 # ---------------- LOGOUT ----------------
 @app.route('/logout')
 def logout():
