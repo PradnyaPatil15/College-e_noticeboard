@@ -2,3 +2,4 @@ Flask
 Werkzeug
 streamlit
 sentence-transformers
+nltk
