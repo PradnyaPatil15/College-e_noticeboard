@@ -10,7 +10,7 @@ from email import encoders
 from config import Config
 from datetime import datetime
 from ai.chatbot import search_notices
-from ai.nlp import preprocess_text, detect_category
+from ai.nlp import preprocess_text, detect_category, detect_intent
 import openpyxl
 
 app = Flask(__name__)
@@ -533,20 +533,69 @@ def ai_chat():
 
         question = request.form['question']
 
+        words = preprocess_text(question)
+        intent = detect_intent(words)
+
+        print("Question:", question)
+        print("Words:", words)
+        print("Intent:", intent)
+
         results = search_notices(question)
 
         if results:
 
             best_score, best_notice = results[0]
 
-            answer = (
-                f"Based on the available notices, "
-                f"the most relevant notice is: "
-                f"{best_notice['title']}"
-            )
+            # ---------------- INTENT BASED ANSWER ----------------
+
+            if intent == "DATE_QUERY":
+
+                answer = (
+                    f"📅 For your date/deadline query, "
+                    f"the relevant notice is: "
+                    f"{best_notice['title']}."
+                    f"\n\nPlease check the notice details for "
+                    f"the exact date, deadline, and schedule."
+                )
+
+            elif intent == "ELIGIBILITY_QUERY":
+
+                answer = (
+                    f"🎓 For your eligibility query, "
+                    f"the relevant notice is: "
+                    f"{best_notice['title']}."
+                    f"\n\nPlease check the notice details for "
+                    f"eligibility criteria and requirements."
+                )
+
+            elif intent == "SUMMARY_QUERY":
+
+                answer = (
+                    f"📋 Summary of the relevant notice:\n\n"
+                    f"{best_notice['title']}\n\n"
+                    f"{best_notice['body']}"
+                )
+
+            elif intent == "LATEST_NOTICES":
+
+                answer = (
+                    f"🆕 Latest relevant notice:\n\n"
+                    f"{best_notice['title']}"
+                )
+
+            else:
+
+                answer = (
+                    f"🤖 The most relevant notice for your question is:\n\n"
+                    f"{best_notice['title']}"
+                )
 
         else:
-            answer = "Sorry, I could not find any relevant notice."
+
+            answer = (
+                "❌ Sorry, I could not find any relevant notice "
+                "for your question."
+            )
 
     return render_template(
         'ai_chat.html',
