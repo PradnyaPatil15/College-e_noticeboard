@@ -10,6 +10,7 @@ from email import encoders
 from config import Config
 from datetime import datetime
 from ai.chatbot import search_notices
+from ai.nlp import preprocess_text, detect_category
 import openpyxl
 
 app = Flask(__name__)
@@ -41,6 +42,11 @@ def init_db():
         cur.execute("ALTER TABLE students ADD COLUMN last_login TEXT")
     except:
         pass
+    
+    try:
+        cur.execute("ALTER TABLE notices ADD COLUMN category TEXT")
+    except:
+        pass
 
     cur.execute('''
     CREATE TABLE IF NOT EXISTS students(
@@ -68,7 +74,8 @@ def init_db():
         year TEXT,
         division TEXT,
         target_type TEXT,
-        target_id INTEGER
+        target_id INTEGER,
+        category TEXT
     )
     ''')
 
@@ -381,24 +388,30 @@ def add_notice():
     divisions = request.form.getlist('division')
     target_type = request.form['target_type']
     student_id = request.form.get('student_id')
+    title = request.form['title']
+    description = request.form['description']
+
+    words = preprocess_text(title + " " + description)
+    category = detect_category(words)
 
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
     INSERT INTO notices
-    (title,body,filename,date,department,year,division,target_type,target_id)
-    VALUES (?,?,?,?,?,?,?,?,?)
+    (title,body,filename,date,department,year,division,target_type,target_id,category)
+    VALUES (?,?,?,?,?,?,?,?,?,?)
     """,(
-        request.form['title'],
-        request.form['description'],
+        title,
+        description,
         filename,
         datetime.now().strftime("%d %b %Y, %I:%M %p"),
         ",".join(departments),
         ",".join(years),
         ",".join(divisions),
         target_type,
-        student_id
+        student_id,
+        category
     ))
 
     # Email selection
